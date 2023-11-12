@@ -16,10 +16,20 @@ AUDIO_FILES_FOLDER = 'audioFiles'
 # Number needs to between 0 and 1
 @app.route('/generate-image', methods=['POST'])
 def generateImage():
+
     data = request.get_json()
     print(data)
     #Default is 0.2 assuming there is no number sent
     number = data.get('number', 0.2)
+
+
+    # Choose the filename
+    filename = "difficulty.txt"
+
+    # Open the file in write mode and write the number
+    with open(filename, 'w') as file:
+        file.write(str(number))
+
 
     #Generate the sheet music (I think this should work)
     main1(number)
@@ -54,8 +64,23 @@ def returnScore():
     audio_file.save(audio_file_path)
 
     score = main2(filename)
+
+
+    
+    with open("difficulty.txt", 'r') as file:
+        oldDifficulty = file.read()
+        # Convert the string back to a float
+        oldDifficulty = float(oldDifficulty)
+
+    if score < 0.5:
+        updatedDifficultyLevel = oldDifficulty * 0.8
+    else:
+        updatedDifficultyLevel = (1-oldDifficulty)*0.2 + oldDifficulty
+
+
+    #Store the score in the 
     #Example response with a number (e.g., analysis result)
-    return jsonify({"result": score}), 200
+    return jsonify({"result": score, "newDifficulty" : updatedDifficultyLevel}), 200
 
 
 
