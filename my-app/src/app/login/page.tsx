@@ -8,6 +8,7 @@ const Login = () => {
   const router = useRouter();
   const [error, setError] = useState("");
   const { data: session, status: sessionStatus } = useSession();
+  console.log(session)
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
@@ -53,6 +54,7 @@ const Login = () => {
     return <h1>Loading...</h1>;
   }
 
+  
   return (
     sessionStatus !== "authenticated" && (
       <div className="flex min-h-screen flex-col items-center justify-between p-24">
