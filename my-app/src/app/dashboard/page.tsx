@@ -1,36 +1,15 @@
-'use client'
-import React, { useState } from 'react';
+import React from "react";
+import { getServerSession } from "next-auth";
 
-const AudioUploadButton = () => {
-    const [file, setFile] = useState(null);
+const Dashboard = async () => {
 
-    const handleFileChange = (event: any) => {
-        const uploadedFile = event.target.files[0];
-        if (uploadedFile) {
-            setFile(uploadedFile);
-            console.log('Audio file uploaded:', uploadedFile.name);
-            // You can handle the file upload logic here
-        }
-    };
-
-    return (
-        <div>
-            <input 
-                type="file" 
-                id="audio-upload" 
-                accept="audio/*" 
-                onChange={handleFileChange} 
-                hidden 
-            />
-            <label 
-                htmlFor="audio-upload" 
-                className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-                Upload Audio
-            </label>
-            {file && <p>File selected: {file.name}</p>}
-        </div>
-    );
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-between p-24">
+      Dashboard
+    </div>
+  );
 };
 
-export default AudioUploadButton;
+
+
+export default Dashboard;
