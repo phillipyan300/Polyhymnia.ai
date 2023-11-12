@@ -8,6 +8,6 @@
         \key c \major
         \time 4/4
 
-        c' 4 g 4 ais 2 fis 2 c 4 dis 4 f 4. c' 4 ais 2 
+        dis 4 f 2 fis 4. f 2 fis 4 f 4 dis 2 g 4 f 4 g 2 
     }
     }

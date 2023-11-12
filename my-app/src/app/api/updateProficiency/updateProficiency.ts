@@ -24,7 +24,7 @@ export default async (req : any, res : any) => {
         // Calculate new proficiencyScore
         // let curr = 0.05
 
-      let newScore = user.proficiencyScore + (change * 0.05) * (1-user.proficiencyScore);
+      let newScore = user.proficiencyScore + (change-0.5 * 0.05) * (1-user.proficiencyScore);
 
       const updatedUser = await User.findOneAndUpdate(
         { email: email },
