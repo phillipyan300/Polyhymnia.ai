@@ -79,10 +79,9 @@ def cleanPitch(noteStr: str) -> str:
     #Convert multicharracter elements of the note string into single elements
     hashMap = {"c": 'a', "cis": 'b', "d" : 'c', "dis": 'd', "e": 'e',
                               "f": 'f', "fis": 'g', "g": 'h',  "gis": 'i',  "a": 'j',  
-                              "ais": 'k', "b" :'l',  "c''": 'm',  "cis'":'n',  "d'":'o',  
-                              "dis'":'p',  "e'": 'q',  "f'": 'r',  "fis'":'s',  "g'":'t',  
-                              "gis'":'u',  "a'": 'v',  "ais'" :'w', "b'": 'x',  "c''": 'y',
-                              "r" : 'z',
+                              "ais": 'k', "b" :'l',  "c'": 'a',  "cis'":'b',  "d'":'c',  
+                              "dis'":'d',  "e'": 'e',  "f'": 'f',  "fis'":'g',  "g'":'h',  
+                              "gis'":'i',  "a'": 'j',  "ais'" :'k', "b'": 'l',  "c''": 'a'
                               }  #Don't forget about the rest!!
 
     split = noteStr.split(" ")
@@ -90,37 +89,64 @@ def cleanPitch(noteStr: str) -> str:
         if split[i] in hashMap:
             encodedChar = hashMap[split[i]]
             returnStr += encodedChar
+        #If it is a space
+        else:
+            continue
     return returnStr
 
 def cleanRhythm(noteStr: str) -> str:
     returnStr = ""
     #convert multicharacter elements of the rhythm into single elements
-    hashMap = {"16": 'a',  "8": 'b', "4":'c', "4.": 'd', "2": 'e', "4": 'f'}
+    hashMap = {"16": 'a',  "8": 'b', "4":'c', "4.": 'd', "2": 'e', "1": 'f'}
     split = noteStr.split(" ")
 
-    for i in range(1, len(split), 2):
-        if split[i] in hashMap:
-            encodedChar = hashMap[split[i]]
+    #remove rests
+    updatedSplit = []
+    for i in range(0, len(split), 2):
+        if i+1 < len(split):
+            if split[i] == "r":
+                continue
+            else:
+                updatedSplit.append(split[i])
+                updatedSplit.append(split[i+1])
+
+                
+    for i in range(1, len(updatedSplit), 2):
+        if updatedSplit[i] in hashMap:
+            encodedChar = hashMap[updatedSplit[i]]
             returnStr += encodedChar
     return returnStr
 
 
 #Returns needleman Wunsch score
 def run(correctStr: str, studentStr: str) -> int:
+    blendFactor = 1.01
+
 
     rhythmCorrect = cleanRhythm(correctStr)
     rhythmStudent = cleanRhythm(studentStr)
+    print(rhythmCorrect)
+    print(rhythmStudent)
+    
+
 
     pitchCorrect = cleanPitch(correctStr)
     pitchStudent = cleanPitch(studentStr)
     
 
+    print(pitchCorrect)
+    print(pitchStudent)
+
     rhythmScore = runNeedlemans(rhythmCorrect, rhythmStudent)
+    rhythmScore = rhythmScore * (1-blendFactor)
     pitchScore = runNeedlemans(pitchCorrect, pitchStudent)
+
+
+
 
     #Alternatively, can return both scores
 
-    return (rhythmScore + pitchScore) / 2
+    return (rhythmScore + pitchScore) / (blendFactor)
 
 
 

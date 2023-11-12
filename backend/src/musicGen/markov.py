@@ -254,7 +254,7 @@ def run(measures: int, difficulty: float) -> str:
 
 
 if __name__ == "__main__":
-    print(run(4, 0.5))
+    print(run(4, 0.2))
 
 
 

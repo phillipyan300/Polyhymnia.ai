@@ -15,12 +15,13 @@ def main(audioFile: str):
 
     with open(file_path, 'r') as file:
         correctNotes = file.readline().strip()
-    print(correctNotes)
-
+    #print(correctNotes)
+    
 
     #Get the student's notes from the audio
     studentNotes = basicPitch.run(f"audioFiles/{audioFile}")
     print(studentNotes)
+
 
     #Perform the diff operation
     score = diff.run(correctNotes, studentNotes)
@@ -28,7 +29,7 @@ def main(audioFile: str):
     return score
 
 if __name__ == "__main__":
-    print(main("120HalfC.mp3"))
+    print(main("wrongtime2.m4a"))
 
 
 #Runs the markov.py to get the correct notes. 
