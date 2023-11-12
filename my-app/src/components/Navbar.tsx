@@ -21,7 +21,7 @@ const Navbar = () => {
     if (session && session.user && session.user.proficiencyScore) {
       try {
         // Make a POST request to your Flask endpoint
-        const response = await fetch('YOUR_FLASK_ENDPOINT', {
+        const response = await fetch('http://127.0.0.1:5000/generate-image', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

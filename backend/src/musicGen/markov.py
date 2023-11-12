@@ -217,7 +217,7 @@ def lilyToPDF(filename: str):
     image = convert_from_path('my_music.pdf')
     image[0].save('my_music.png')
 
-    shutil.copy("my_music.png", "../../../my-app/public/my_music.png")
+    shutil.copy("my_music.png", "/Users/phillipyan/Documents/hackprinceton2023/my-app/public/my_music.png")
 
 
 

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 const AudioUploadButton = () => {
     const [file, setFile] = useState(null);
     // The PDF URL is now a path that is relative to the public directory
-    const [pdfUrl, setPdfUrl] = useState('http://localhost:3000/my_music.pdf');
+    const [pdfUrl, setPdfUrl] = useState('http://localhost:3000/my_music.png');
 
     const handleFileChange = (event : any) => {
         const uploadedFile = event.target.files[0];
