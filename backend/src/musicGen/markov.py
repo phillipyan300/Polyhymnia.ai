@@ -198,7 +198,7 @@ def generateLily(notes: list) -> str:
     #print(lilypond_notation)
 
     filename = "my_music.ly"
-    #lilyNote = measureFit(lilyNote)
+    lilyNote = measureFit(lilyNote)
     #Edit the a little bit to make the measures exactly 4 beats
     with open(filename, 'w') as file:
         file.write(lilypond_notation)
@@ -206,8 +206,20 @@ def generateLily(notes: list) -> str:
     print(f"LilyPond file '{filename}' has been created.")
     return lilyNote
 
-# #Helper method just to make sure s
+# #Helper method just to make sure string fits in the measutre
 # def measureFit(lilyNote: str) -> str:
+#     #Split the string into a list
+#     newLilyNote = ""
+#     tempList = lilyNote.split(" ")
+#     beatsLeft = 64
+#     for index in range(0, len(tempList), 2):
+#         #New measure
+#         if tempList[index] > beatsLeft:
+#             newLilyNote += 
+#             tempList[index] -= beatsLeft
+#             beatsLeft = 64 - length
+        
+
 
 
 #This function takes a lilypond file and converts it to a pdf

@@ -70,7 +70,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <span>{session.user?.email} (Score: {session.user?.proficiencyScore?.toFixed(2)})</span>
+              <span>{session.user?.email}</span>
                 <li>
                   <Link href="/train">
                     <li
