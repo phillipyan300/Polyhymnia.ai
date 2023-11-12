@@ -19,7 +19,7 @@ Notes/Log:
 #Takes in a mp3 file and returns the lilypond string format
 #NOTE That this is the filepath, not the filename
 def pitchDetect(filename: str) -> str:
-    pitchToNote = {60: "c", 61: "cis", 62: "d", 63: "dis", 64: "e", 65: "f", 66: "fis", 67: "g", 68: "gis", 69: "a", 70: "ais", 71: "b", 72: "c''", 73: "cis'", 74: "d'", 75: "dis'", 76: "e'", 77: "f'", 78: "fis'", 79: "g'", 80: "gis'", 81: "a'", 82: "ais'", 83: "b'", 84: "c''"}
+    pitchToNote = {60: "c", 61: "cis", 62: "d", 63: "dis", 64: "e", 65: "f", 66: "fis", 67: "g", 68: "gis", 69: "a", 70: "ais", 71: "b", 72: "c'", 73: "cis'", 74: "d'", 75: "dis'", 76: "e'", 77: "f'", 78: "fis'", 79: "g'", 80: "gis'", 81: "a'", 82: "ais'", 83: "b'", 84: "c''"}
     # Define your minimum and maximum frequency values
     min_frequency = 258 # Your minimum frequency value in Hz, C4
     max_frequency = 1080 # Your maximum frequency value in Hz C6

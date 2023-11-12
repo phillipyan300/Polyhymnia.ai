@@ -11,3 +11,6 @@ def main(difficulty: float):
     #Generate 4 measures
     markov.run(4, difficulty)
     #Can grab the lilypond pdf from the gen folder
+
+if __name__ == "__main__":
+    print(main(0.5))
