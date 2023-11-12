@@ -1,6 +1,6 @@
-# hackprinceton2023
+# Hack Princeton 2023
 
-hackprinceton2023 is Yash, Phillip, and Matthew's project submission for HackPrinceton 2023!
+This project is Yash, Phillip, and Matthew's submission for HackPrinceton 2023!
 
 ## Project introduction
 
