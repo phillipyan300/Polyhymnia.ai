@@ -48,24 +48,25 @@ const Navbar = () => {
   };
 
   return (
-    <div>
-      <ul className="flex justify-between m-10 item-center">
-        <div>
+          <div className="bg-gray-800 text-white shadow-lg">
+<ul className="flex justify-between items-center py-4 px-10">
+          <div>
           <Link href="/">
-            <li>Home</li>
+            <li className="text-xl font-semibold hover:text-blue-300">Home</li>
           </Link>
         </div>
-        <div className="flex gap-10">
-          <Link href="/dashboard">
-           <li>Dashboard</li>
-          </Link>
+        <div className="flex items-center gap-8">
           {!session ? (
             <>
-              <Link href="/login">
-                <li>Login</li>
+              <Link 
+              href="/login">
+                <li               className="hover:text-blue-300"
+>Login</li>
               </Link>
-              <Link href="/register">
-                <li>Register</li>
+              <Link 
+              
+              href="/register">
+                <li className="hover:text-blue-300">Register</li>
               </Link>
             </>
           ) : (
@@ -73,13 +74,16 @@ const Navbar = () => {
               <span>{session.user?.email}</span>
                 <li>
                   <Link href="/train">
-                    <li
+                    <li className="ver:text-blue-300"
                       onClick={sendProficiencyScore}
-                    >Train</li>
+                    >Train
+                    </li>
                   </Link>
+                  </li>
+                  <li>
                 <button
                   onClick={() => signOut()}
-                  className="p-2 px-5 -mt-1 bg-blue-800 rounded-full"
+                  className="text-sm p-2 bg-blue-600 hover:bg-blue-700 rounded-full transition duration-300"
                 >
                   Logout
                 </button>

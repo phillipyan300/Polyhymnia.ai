@@ -5,8 +5,7 @@ import React, { useState } from 'react';
 const MyComponent = () => {
     const [file, setFile] = useState(null);
     const [newDifficulty, setNewDifficulty] = useState(null);
-    const [pdfUrl, setPdfUrl] = useState(null); // Assuming you have a state for PDF URL
-
+const [pdfUrl, setPdfUrl] = useState('http://localhost:3000/my_music.png');
     const handleFileChange = async (event) => {
         // Update the state with the selected file
         const selectedFile = event.target.files[0];

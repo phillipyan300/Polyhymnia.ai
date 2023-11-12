@@ -1,1 +1,1 @@
-c 2 dis 4. c' 4 c' 2 r4 c' 4. ais 2 f 2 f 8 g 4 
+f 2 fis 4. fis 2 dis 8 c 2 c 2 c 4. dis 4. dis 4. 

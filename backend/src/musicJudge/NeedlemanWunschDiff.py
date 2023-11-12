@@ -127,7 +127,9 @@ def run(correctStr: str, studentStr: str) -> int:
 
     rhythmCorrect = cleanRhythm(correctStr)
     rhythmStudent = cleanRhythm(studentStr)
+    print("Rhythm Correct")
     print(rhythmCorrect)
+    print("Rhythm Student")
     print(rhythmStudent)
     
 
@@ -135,8 +137,9 @@ def run(correctStr: str, studentStr: str) -> int:
     pitchCorrect = cleanPitch(correctStr)
     pitchStudent = cleanPitch(studentStr)
     
-
+    print("Pitch Correct")
     print(pitchCorrect)
+    print("Pitch Student")
     print(pitchStudent)
 
     rhythmScore = runNeedlemans(rhythmCorrect, rhythmStudent)

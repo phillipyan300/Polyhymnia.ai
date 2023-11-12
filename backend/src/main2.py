@@ -11,15 +11,17 @@ Upon audio submission, then this part 2 will run
 
 def main(audioFile: str):
      #Get the stored correct notes from the markov.py
-    file_path = 'musicGen/lilypond.txt'
+    file_path = 'lilypond.txt'
 
     with open(file_path, 'r') as file:
         correctNotes = file.readline().strip()
-    #print(correctNotes)
+    print("Correct Notes")
+    print(correctNotes)
     
 
     #Get the student's notes from the audio
     studentNotes = basicPitch.run(f"audioFiles/{audioFile}")
+    print("Student Notes: ")
     print(studentNotes)
 
 

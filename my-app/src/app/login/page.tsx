@@ -61,8 +61,8 @@ const Login = () => {
         <div className="absolute top-4 left-4 flex items-center">
           {/* Icon and Text - Adjust as needed */}
         </div>
-        <div className="bg-[#800000] p-8 rounded-lg shadow-md w-full max-w-md">
-          <h1 className="text-5xl text-center font-semibold text-white mb-8">Login</h1>
+        <div className="p-8 rounded-lg shadow-md w-full max-w-md">
+          <h1 className="text-black text-5xl text-center font-semibold mb-8">Login</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"

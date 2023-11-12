@@ -20,19 +20,16 @@ def generateImage():
     data = request.get_json()
     print(data)
     #Default is 0.2 assuming there is no number sent
-    number = data.get('number', 0.2)
+    
 
-
-    # Choose the filename
-    filename = "difficulty.txt"
-
-    # Open the file in write mode and write the number
-    with open(filename, 'w') as file:
-        file.write(str(number))
-
+    with open("difficulty.txt", 'r') as file:
+        difficulty = file.read()
+        # Convert the string back to a float
+        difficulty = float(difficulty)
+    print(difficulty)
 
     #Generate the sheet music (I think this should work)
-    main1(number)
+    main1(difficulty)
 
     #Obtain the sheet music working directory
     file_path = 'musicGen/my_music.pdf'
@@ -77,10 +74,14 @@ def returnScore():
     else:
         updatedDifficultyLevel = (1-oldDifficulty)*0.2 + oldDifficulty
 
+    #update the difficulty
+    # Open the file in write mode and write the number
+    with open("difficulty.txt", 'w') as file:
+        file.write(str(updatedDifficultyLevel))
 
     #Store the score in the 
     #Example response with a number (e.g., analysis result)
-    return jsonify({"result": score, "newDifficulty" : updatedDifficultyLevel}), 200
+    return jsonify({"result": score, "newDifficulty" : score}), 200
 
 
 

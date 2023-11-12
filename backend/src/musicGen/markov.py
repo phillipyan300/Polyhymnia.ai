@@ -198,7 +198,7 @@ def generateLily(notes: list) -> str:
     #print(lilypond_notation)
 
     filename = "my_music.ly"
-    lilyNote = measureFit(lilyNote)
+    #lilyNote = measureFit(lilyNote)
     #Edit the a little bit to make the measures exactly 4 beats
     with open(filename, 'w') as file:
         file.write(lilypond_notation)
