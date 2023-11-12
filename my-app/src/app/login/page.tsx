@@ -8,6 +8,7 @@ const Login = () => {
   const router = useRouter();
   const [error, setError] = useState("");
   const { data: session, status: sessionStatus } = useSession();
+  
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
@@ -53,40 +54,41 @@ const Login = () => {
     return <h1>Loading...</h1>;
   }
 
+  
   return (
     sessionStatus !== "authenticated" && (
-      <div className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="bg-[#212121] p-8 rounded shadow-md w-96">
-          <h1 className="text-4xl text-center font-semibold mb-8">Login</h1>
-          <form onSubmit={handleSubmit}>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-white">
+        <div className="absolute top-4 left-4 flex items-center">
+          {/* Icon and Text - Adjust as needed */}
+        </div>
+        <div className="bg-[#7f0000] p-8 rounded-lg shadow-md w-full max-w-md">
+          <h1 className="text-5xl text-center font-semibold text-white mb-8">Login</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
-              className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black"
+              className="w-full border border-black bg-white text-black rounded px-3 py-2 focus:outline-none focus:border-blue-400"
               placeholder="Email"
               required
             />
             <input
               type="password"
-              className="w-full border border-gray-300 text-black rounded px-3 py-2 mb-4 focus:outline-none focus:border-blue-400 focus:text-black"
+              className="w-full border border-black bg-white text-black rounded px-3 py-2 focus:outline-none focus:border-blue-400"
               placeholder="Password"
               required
             />
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+              className="w-full bg-white text-black py-2 rounded hover:bg-gray-800 hover:text-white"
             >
-              {" "}
               Sign In
             </button>
-            <p className="text-red-600 text-[16px] mb-4">{error && error}</p>
+            <p className="text-white text-lg text-center">{error && error}</p>
           </form>
-         
           <div className="text-center text-gray-500 mt-4">- OR -</div>
-          <Link
-            className="block text-center text-blue-500 hover:underline mt-2"
-            href="/register"
-          >
-            Register Here
+          <Link legacyBehavior href="/register">
+            <a className="block text-center text-blue-500 hover:underline mt-2">
+              Register Here
+            </a>
           </Link>
         </div>
       </div>

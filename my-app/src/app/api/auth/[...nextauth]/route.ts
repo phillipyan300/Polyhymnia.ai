@@ -1,12 +1,11 @@
-import NextAuth from "next-auth";
-import { Account, User as AuthUser } from "next-auth";
-import GithubProvider from "next-auth/providers/github";
+import NextAuth, { Account, NextAuthOptions, User as NextAuthUser, Profile } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "@/models/User";
 import connect from "@/utils/db";
+import { JWT } from "next-auth/jwt";
 
-export const authOptions: any = {
+export const authOptions: NextAuthOptions= {
   providers: [
     CredentialsProvider({
       id: "credentials",
@@ -36,10 +35,21 @@ export const authOptions: any = {
     // ...add more providers here
   ],
   callbacks: {
-    async signIn({ user, account }: { user: AuthUser; account: Account }) {
-      if (account?.provider == "credentials") {
-        return true;
+    // Add callbacks if needed
+    jwt: async ({ token, user, account, profile }:{token: JWT, user: NextAuthUser, account?: (Account | null) , profile?: Profile}) => {
+      console.log(token, user, account)
+      try {
+        const user_ = await User.findOne({ email: token.email });
+        token.proficiencyScore= user_.proficiencyScore
+      } catch (err) {
+        throw new Error(err as any);
       }
+      return token
+    },
+    async session({ session, user, token }) {
+      // @ts-ignore
+      session.user.proficiencyScore = token.proficiencyScore
+      return session
     },
   },
 };
