@@ -13,13 +13,17 @@ Purpose:
 4. Converts lilypond file to pdf stored in the same directory as "my_music.pdf"
 
 
+Input: None, parameters can be tweaked
+Output: lilypond notation of correct notes, and generates a playable midi file and a lilypond file
+
+
 #Issues: 
 1.  Lily wrong length sometimes (not example 4/4) will need to consider fitting into 4/4 and considering slurring across measures
 
 """
 
 # Generate a random note: Returns the string note and the float length
-def generateNote(seedNote: str, seedLength: str) -> str:
+def generateNote(seedNote: str, seedLength: str, difficulty: float) -> str:
     #print(seedNote)
     #print(seedLength)
     # Generate Notes
@@ -41,12 +45,21 @@ def generateNote(seedNote: str, seedLength: str) -> str:
         [0.2, 0.1, 0.1, 0.1, 0.2, 0.1, 0.1, 0.1], # Rest
     ]
 
+
+    #Markov weights are based on difficulty
+    note16prob = 0.2 * difficulty
+    note8prob = 0.3 * difficulty
+    note4prob = 0.3
+    note2prob = 0.2
+    #Note we know the above cannot be greater than 1
+    note1prob = 1-(note16prob + note8prob + note4prob + note2prob)
+
     length_markov_chain = [
-        [0.00, 0.5, 0.2, 0.2, 0.1], # 0.25
-        [0.00, 0.5, 0.2, 0.2, 0.1], # 0.5
-        [0.00, 0.5, 0.2, 0.2, 0.1], # 1
-        [0.00, 0.5, 0.2, 0.2, 0.1], # 1.5
-        [0.00, 0.5, 0.2, 0.2, 0.1], # 2
+        [note16prob, note8prob, note4prob, note2prob, note1prob], # 0.25
+        [note16prob, note8prob, note4prob, note2prob, note1prob], # 0.5
+        [note16prob, note8prob, note4prob, note2prob, note1prob], # 1
+        [note16prob, note8prob, note4prob, note2prob, note1prob], # 1.5
+        [note16prob, note8prob, note4prob, note2prob, note1prob], # 2
     ]
 
     
@@ -83,7 +96,7 @@ def generateNote(seedNote: str, seedLength: str) -> str:
 
 
 # Measures need to be at least 1
-def generateMelody(measures: int) -> list[tuple[str, int, int]]:
+def generateMelody(measures: int, difficulty: float) -> list[tuple[str, int, int]]:
     potentialNotes = {"C'": 60, "Eb": 63, "F": 65, "F#": 66, "G": 67, "Bb": 70, "C''": 72, "Rest": "Rest"}
     melody = []
     totalLength = measures * 4
@@ -92,7 +105,7 @@ def generateMelody(measures: int) -> list[tuple[str, int, int]]:
     length = 1
     #While there are at least two beats left
     while currBeat < totalLength-2:
-        info = generateNote(note, length)
+        info = generateNote(note, length, difficulty)
         note = info[0]
         length = info[1]
 
@@ -105,18 +118,6 @@ def generateMelody(measures: int) -> list[tuple[str, int, int]]:
         melody.append((potentialNotes[note], currBeat, currBeat+length))
         currBeat += length
     return melody
-
-#generates both a midi file and a lilypond file
-def generate(measures: int) -> str:
-    # List of notes. Each note is a tuple with (pitch, time, duration).
-    # For example: (60, 0, 1) is middle C, at the beginning, lasting 1 beat.
-    notes = generateMelody(measures)
-    #print(notes)
-    generateMid(notes, measures)
-    generateLily(notes)
-    lilyToPDF("my_music.ly")
-    return "MIDI and LilyPond files have been generated."
-    
 
 
 def generateMid(notes: list, measures: int):
@@ -138,15 +139,16 @@ def generateMid(notes: list, measures: int):
         midi_file.addNote(track, channel, pitch, time, duration, volume)
 
 
-    # Write the MIDI file to disk
+    # Write the MIDI file
     with open("output.mid", "wb") as output_file:
         midi_file.writeFile(output_file)
     return "MIDI file has been written to 'output.mid'"
 
 #This generates the lilypond file which, when run, produces sheet music
-def generateLily(notes: list):
-    toLilyNote = {60: "c", 61: "cis", 62: "d", 63: "dis", 64: "e", 65: "f", 66: "fis", 67: "g", 68: "gis", 69: "a", 70: "ais", 71: "b", 72: "c'", 73: "cis'", 74: "d'", 75: "dis'", 76: "e'", 77: "f'", 78: "fis'", 79: "g'", 80: "gis'", 81: "a'", 82: "ais'", 83: "b'"}
-    toLilyLength = {0.25: "16", 0.5: "8", 1: "4", 1.5: "4.", 2: "2"}
+#Also returns the string fo the lilypond file
+def generateLily(notes: list) -> str:
+    toLilyNote = {60: "c", 61: "cis", 62: "d", 63: "dis", 64: "e", 65: "f", 66: "fis", 67: "g", 68: "gis", 69: "a", 70: "ais", 71: "b", 72: "c'", 73: "cis'", 74: "d'", 75: "dis'", 76: "e'", 77: "f'", 78: "fis'", 79: "g'", 80: "gis'", 81: "a'", 82: "ais'", 83: "b'", 84: "c''"}
+    toLilyLength = {0.25: "16", 0.5: "8", 1: "4", 1.5: "4.", 2: "2", 4: "1"}
     print(notes)
     prevEnd = 0
     lilyNote = ""
@@ -192,7 +194,12 @@ def generateLily(notes: list):
     with open(filename, 'w') as file:
         file.write(lilypond_notation)
 
+    #Stores the lilyNote in a temporary text file
+    with open("lilypond.txt", 'w') as file:
+        file.write(lilyNote)
+
     print(f"LilyPond file '{filename}' has been created.")
+    return lilyNote
 
 
 #This function takes a lilypond file and converts it to a pdf
@@ -217,11 +224,28 @@ def play(filename: str):
         time.sleep(1)
 
 
-def run(measures: int):
-    print(generate(measures))
-    os.system(f"open my_music.pdf")
-    play("output.mid")
-    print("Done playing")
+
+#generates both a midi file and a lilypond file
+def generate(measures: int, difficulty: float) -> str:
+    # List of notes. Each note is a tuple with (pitch, time, duration).
+    # For example: (60, 0, 1) is middle C, at the beginning, lasting 1 beat.
+    notes = generateMelody(measures, difficulty)
+    #print(notes)
+    generateMid(notes, measures)
+    correctNotes = generateLily(notes)
+    lilyToPDF("my_music.ly")
+    print("MIDI and LilyPond files have been generated.")
+
+    return correctNotes
+    
+
+
+def run(measures: int, difficulty: float) -> str:
+    correctNotes = generate(measures, difficulty)
+    # os.system(f"open my_music.pdf")
+    # play("output.mid")
+    # print("Done playing")
+    return correctNotes
 
 
 
@@ -230,7 +254,7 @@ def run(measures: int):
 
 
 if __name__ == "__main__":
-    print(run(4))
+    print(run(4, 0.5))
 
 
 
