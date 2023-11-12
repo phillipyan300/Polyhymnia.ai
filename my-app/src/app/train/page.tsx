@@ -3,15 +3,29 @@ import React, { useState } from 'react';
 
 const AudioUploadButton = () => {
     const [file, setFile] = useState(null);
-    // The PDF URL is now a path that is relative to the public directory
     const [pdfUrl, setPdfUrl] = useState('http://localhost:3000/my_music.pdf');
 
-    const handleFileChange = (event : any) => {
+    const handleFileChange = async (event: any) => {
         const uploadedFile = event.target.files[0];
         if (uploadedFile) {
-            setFile(uploadedFile);
+            setFile(uploadedFile.name);
             console.log('Audio file uploaded:', uploadedFile.name);
-            // Here you can handle the file upload logic
+
+            // Create FormData
+            const formData = new FormData();
+            formData.append('audio', uploadedFile);
+
+            // POST request with FormData
+            try {
+                const response = await fetch('YOUR_ENDPOINT_URL', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await response.json();
+                console.log('Server response:', data);
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
         }
     };
 
