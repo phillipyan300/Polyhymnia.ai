@@ -68,6 +68,8 @@ def runNeedlemans(correctStr: str, studentStr: str) -> int:
     #Basically making everything positive for easier division. Min is 0, max is max+min
     raw = needleman_wunsch(correctStr, studentStr)[2] + abs(min)
     score = raw / (abs(min) + abs(max))
+    if score < 0:
+        score = 0
     #print(score)
 
     return score
