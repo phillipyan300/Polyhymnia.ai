@@ -3,6 +3,8 @@ from midiutil import MIDIFile
 import os
 import pygame
 import time
+import shutil
+from pdf2image import convert_from_path
 
 
 """
@@ -209,6 +211,14 @@ def lilyToPDF(filename: str):
     print(filename[:-3] + ".pdf")
     os.system(f"lilypond {filename}")
     #os.system(f"open {filename[:-3]}.pdf")
+
+    #move the pdf to directory for Yash
+    image = convert_from_path('my_music.pdf')
+    image[0].save('my_music.png')
+
+    shutil.copy("my_music.png", "../../../my-app/public/my_music.png")
+
+
 
 def play(filename: str):
     # Initialize pygame mixer
