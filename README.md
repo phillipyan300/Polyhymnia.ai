@@ -1,6 +1,8 @@
-# Hack Princeton 2023
+# Polyhymnia.ai 
 
 This project is Yash, Phillip, and Matthew's submission for HackPrinceton 2023!
+
+
 
 ## Project introduction
 

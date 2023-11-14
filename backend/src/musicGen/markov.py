@@ -112,16 +112,16 @@ def generateMelody(measures: int, difficulty: float) -> list[tuple[str, int, int
         length = info[1]
 
         #If the note is a rest, then we can just add it
-        if note == "Rest":
-            currBeat += length
-            continue
+        # if note == "Rest":
+        #     currBeat += length
+        #     continue
 
         #Otherwise, we append the note and its start and end
         melody.append((potentialNotes[note], currBeat, currBeat+length))
         currBeat += length
     return melody
 
-
+#I don't think we need to generate a Mid; have commented it out in the run
 def generateMid(notes: list, measures: int):
     # Create a MIDIFile object with one track
     midi_file = MIDIFile(1)
@@ -149,9 +149,11 @@ def generateMid(notes: list, measures: int):
 #This generates the lilypond file which, when run, produces sheet music
 #Also returns the string fo the lilypond file
 def generateLily(notes: list) -> str:
+    # print("Raw notes")
+    # print(notes)
     toLilyNote = {60: "c", 61: "cis", 62: "d", 63: "dis", 64: "e", 65: "f", 66: "fis", 67: "g", 68: "gis", 69: "a", 70: "ais", 71: "b", 72: "c'", 73: "cis'", 74: "d'", 75: "dis'", 76: "e'", 77: "f'", 78: "fis'", 79: "g'", 80: "gis'", 81: "a'", 82: "ais'", 83: "b'", 84: "c''"}
     toLilyLength = {0.25: "16", 0.5: "8", 1: "4", 1.5: "4.", 2: "2", 4: "1"}
-    print(notes)
+
     prevEnd = 0
     lilyNote = ""
     for note in notes:
@@ -159,10 +161,16 @@ def generateLily(notes: list) -> str:
         duration = end-start
 
         #Need to first check if there was a gap between the start here and end (this represents a rest)
-        if start != prevEnd:
+        if pitch == "Rest":
+            # print("This Note's start, Duration and prevend")
+            # print(start)
+            # print(duration)
+            # print(prevEnd)
             lilyNote += "r"
-            lilyNote += toLilyLength[start-prevEnd]
             lilyNote += " "
+            lilyNote += toLilyLength[duration]
+            lilyNote += " "
+            continue
         #Convert the note to lily note
         lilyNote += toLilyNote[pitch]
         lilyNote += " "
@@ -189,7 +197,7 @@ def generateLily(notes: list) -> str:
     }}
     }}
 """
-
+    #This is used to compare sound, not shown to user, so the measure doesn't have to be exact
     #Stores the lilyNote in a temporary text file
     with open("lilypond.txt", 'w') as file:
         file.write(lilyNote)
@@ -198,26 +206,123 @@ def generateLily(notes: list) -> str:
     #print(lilypond_notation)
 
     filename = "my_music.ly"
-    #lilyNote = measureFit(lilyNote)
-    #Edit the a little bit to make the measures exactly 4 beats
+    lilyNote = measureFit(lilyNote)
+    #updated notation
+    lilypond_notation = f"""
+    \\version "2.20.0"
+
+    \score {{
+    \\fixed c' {{
+        \\tempo 4 = 120
+        \clef treble
+        \key c \major
+        \\time 4/4
+
+        {lilyNote}
+    }}
+    }}
+"""
+
+    #Edit the a little bit to make the measures exactly 4 beats since shown to user
     with open(filename, 'w') as file:
         file.write(lilypond_notation)
 
     print(f"LilyPond file '{filename}' has been created.")
     return lilyNote
 
-# #Helper method just to make sure string fits in the measutre
-# def measureFit(lilyNote: str) -> str:
-#     #Split the string into a list
-#     newLilyNote = ""
-#     tempList = lilyNote.split(" ")
-#     beatsLeft = 64
-#     for index in range(0, len(tempList), 2):
-#         #New measure
-#         if tempList[index] > beatsLeft:
-#             newLilyNote += 
-#             tempList[index] -= beatsLeft
-#             beatsLeft = 64 - length
+#Helper method just to make sure string fits in the measure
+#MAKE SURE THIS IS NOT USED FOR GRADING
+def measureFit(lilyNote: str) -> str:
+    # print("originalList")
+    # print(lilyNote)
+    #First split the string into a list between character and number
+    newLilyNote = ""
+    for index, c in enumerate(lilyNote):
+        newLilyNote += c
+        #If it is not a digit and not a space, check if the next is a number
+        if not c.isdigit() and c != " " and lilyNote[index+1].isdigit():
+            newLilyNote += " "
+    
+    #Now split the string into a list of strings
+    tempList = newLilyNote.split(" ")
+    #print(tempList)
+    
+    #Mapping between note and the length, with a measure being 16
+    #Weird storing order because want algo to choose the longest possible first
+    lengthMapping = {"1": 16,  "2": 8, "4.": 6,  "4": 4, "8": 2, "16": 1 }
+    
+    #mapping between length and the note for reconstruction
+    lengthToNote = {16: "1",  12:"2.", 8: "2", 6: "4.",  4: "4",  3: "8.",2: "8", 1: "16" }
+
+    beatsLeft = 16
+    finalLilyNote = ""
+
+    #Remove last element of tempArray
+    tempList = tempList[:-1]
+
+    # print("templist")
+    # print(tempList)
+    #For each note, check if it fits in the measure
+    for index in range(0, len(tempList), 2):
+        note = tempList[index]
+        # print(tempList[index+1])
+        duration = lengthMapping[tempList[index+1]]
+
+        #Check if this note fits within the beats left
+        if duration <= beatsLeft:
+            # print(f"can fit {note} {duration}")
+            #Add the whole note and length to the final string
+            finalLilyNote += tempList[index]
+            finalLilyNote += " "
+            finalLilyNote += tempList[index+1]
+
+            #Update the beats left
+            beatsLeft -= duration
+
+            #reset if necessary
+            if beatsLeft == 0:
+                beatsLeft = 16
+        #if it doesn't fit:
+        else:
+            #Find how much of the note can fit
+            leftover = duration - beatsLeft
+            storeLeftOver = leftover
+            # print(f"can't fit {note} {duration}: beatsleft = {beatsLeft}, nextMeasure = {leftover}")
+
+            #Will add all lengths at the end
+            lengthSequence = []
+            #Iteratively find the largest notes which can fit until all leftover space is filled
+            while beatsLeft != 0:
+                #Would prefer optimizing to find the largest to minimize number of iterations, but randomness is nice too
+                for length in lengthToNote:
+                    if length <= beatsLeft:
+                        lengthSequence.append(length)
+                        beatsLeft -= length
+                        break
+            
+
+            #Take the leftover and do the same
+            while leftover != 0:
+                #Would prefer optimizing to find the alrgest to minimize number of iterations, but randomness is nice too
+                for length in lengthToNote:
+                    if length <= leftover:
+                        lengthSequence.append(length)
+                        leftover -= length
+                        break
+
+            #Now we have the sequence of lengths, we need to convert it back to the string
+            for length in lengthSequence:
+                finalLilyNote += note
+                finalLilyNote += " "
+                finalLilyNote += lengthToNote[length]
+
+
+            #update the finale beats left
+            beatsLeft = 16 - storeLeftOver
+            # print(beatsLeft)
+    return finalLilyNote
+
+
         
 
 
@@ -234,7 +339,7 @@ def lilyToPDF(filename: str):
     image = convert_from_path('my_music.pdf')
     image[0].save('my_music.png')
 
-    shutil.copy("my_music.png", "/Users/phillipyan/Documents/hackprinceton2023/my-app/public/my_music.png")
+    shutil.copy("my_music.png", "../../../my-app/public/my_music.png")
 
 
 
@@ -259,7 +364,7 @@ def generate(measures: int, difficulty: float) -> str:
     # For example: (60, 0, 1) is middle C, at the beginning, lasting 1 beat.
     notes = generateMelody(measures, difficulty)
     #print(notes)
-    generateMid(notes, measures)
+    #generateMid(notes, measures)
     correctNotes = generateLily(notes)
     lilyToPDF("my_music.ly")
     print("MIDI and LilyPond files have been generated.")
@@ -282,7 +387,7 @@ def run(measures: int, difficulty: float) -> str:
 
 
 if __name__ == "__main__":
-    print(run(4, 0.2))
+    run(100, 0.2)
 
 
 
