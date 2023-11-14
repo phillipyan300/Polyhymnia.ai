@@ -5,6 +5,8 @@
 
 As an AI-powered application, Polyhymnia.ai gauges student musicians' proficiency with any instrument and offers infinitely generatable personalized sheet music based on their current skill level.
 
+### Devpost Link: https://devpost.com/software/musai
+
 Built @ HackPrinceton 2023 by
 
 Phillip Yan: Built the backend server, the Markov Chain-based generative algorithm for producing unique and melodic sheet music, and the AI and Needleman-Wunsh judging algorithm for grading student audio submissions.
