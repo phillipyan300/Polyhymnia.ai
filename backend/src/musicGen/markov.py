@@ -339,7 +339,9 @@ def lilyToPDF(filename: str):
     image = convert_from_path('my_music.pdf')
     image[0].save('my_music.png')
 
-    shutil.copy("my_music.png", "../../../my-app/public/my_music.png")
+    #TODO THis breaks when Markov is called, so I have to hardcode it
+    #shutil.copy("my_music.png", "../../../my-app/public/my_music.png")
+    shutil.copy("my_music.png", "/Users/phillipyan/Documents/Polyhymnia.ai/my-app/public/my_music.png")
 
 
 
@@ -387,7 +389,7 @@ def run(measures: int, difficulty: float) -> str:
 
 
 if __name__ == "__main__":
-    run(100, 0.2)
+    run(50, 0.2)
 
 
 

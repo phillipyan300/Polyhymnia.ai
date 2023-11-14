@@ -1,5 +1,8 @@
 # Polyhymnia.ai 
 
+![Logo](resources/Logo.png)
+
+
 As an AI-powered application, Polyhymnia.ai gauges student musicians' proficiency with any instrument and offers infinitely generatable personalized sheet music based on their current skill level.
 
 Built @ HackPrinceton 2023 by
@@ -11,7 +14,7 @@ Matthew Cheng: Planned and designed the front end interface with Figma and creat
 Yash Shah: Setup the back end for user authentification and front end pages alongside the API routes. 
 
 
-## Project introduction
+## Project Introduction
 
 Polyhymnia.ai is an application that allows users to gauge their skills with their choice of musical instrument and be given personalized sheet music based on their skill level so that they can improve at a gradual pace and be given individualized attention. It consists of two parts, first a generative section which constructs sheet music based on a Markov chain of note probabilities and another section which judges how well a student played the music in terms of pitch, rhythm and time.
 
@@ -26,3 +29,6 @@ After each iteration, a user receives a grade for their inputted audio file, wit
 Our project includes innovative music generation methods based on several Markov Chains with parameterized values based on difficulty to procedurally generate melodies that closely replicate real composed music, but which also have an element of uniqueness and randomness.
 
 Our project also utilizes the Needleman-Wunsch algorithm, taking inspiration from bioinformatics to innovatively provide an alignment method to standardize the judgement of submitted audio files.
+
+## Sample Generated Sheet Music
+![Sample Sheet Music](resources/my_music.png)
