@@ -37,14 +37,17 @@ const [pdfUrl, setPdfUrl] = useState('http://localhost:3000/my_music.png');
     return (
         <div>
             {pdfUrl && (
-                <iframe
-                    src={pdfUrl}
-                    width="100%"
-                    height="500px"
-                    style={{ border: 'none' }}
-                    title="PDF Viewer"
-                ></iframe>
-            )}
+    <iframe
+        srcDoc={`<html><body style='margin:0; display:flex; justify-content:center; align-items:center; height:100%;'><img src='${pdfUrl}' style='width:80%; height:auto;'/></body></html>`}
+        width="100%"
+        height="500px"
+        style={{ border: 'none' }}
+        title="Sheet Music Viewer"
+    ></iframe>
+)}
+    
+
+
 
             <div className="mt-4 text-center">
                 <input 
